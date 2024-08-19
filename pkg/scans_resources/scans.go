@@ -1,13 +1,22 @@
 package scans_resources
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 type ScansResources struct {
 	sql *sql.DB
 }
 
 type Scan struct {
-	ID string `json:"id"`
+	ID    string    `json:"id"`
+	Start time.Time `json:"start"`
+}
+
+type Resource struct {
+	rType string
+	name  string
 }
 
 func New(sql *sql.DB) *ScansResources {
@@ -20,7 +29,10 @@ func (sr *ScansResources) GetScans() ([]*Scan, error) {
 
 	var scans []*Scan
 
-	query := "SELECT id from scans"
+	query := `
+SELECT  s.id, s.start
+FROM scans s
+`
 
 	rows, err := sr.sql.Query(query)
 	if err != nil {
@@ -30,16 +42,11 @@ func (sr *ScansResources) GetScans() ([]*Scan, error) {
 
 	for rows.Next() {
 		var scan Scan
-		if err := rows.Scan(&scan.ID); err != nil {
+		if err := rows.Scan(&scan.ID, &scan.Start); err != nil {
 			return nil, err
 		}
 		scans = append(scans, &scan)
 	}
 
-	scans = []*Scan{
-		{ID: "1"},
-		{ID: "2"},
-		{ID: "3"},
-	}
 	return scans, nil
 }
