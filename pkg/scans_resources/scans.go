@@ -15,8 +15,9 @@ type Scan struct {
 }
 
 type Resource struct {
-	rType string
-	name  string
+	ScanID string
+	rType  string
+	name   string
 }
 
 func New(sql *sql.DB) *ScansResources {
@@ -67,4 +68,9 @@ RETURNING id;
 		}
 	}
 	return scan, nil
+}
+
+func (sr *ScansResources) CreateResource(r Resource) (string, error) {
+	return "sdf", nil
+
 }
