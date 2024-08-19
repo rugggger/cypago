@@ -1,24 +1,26 @@
 CREATE TYPE resource_type AS ENUM ('user', 'group', 'repository', 'branch');
 
-CREATE TABLE resources (
-    um SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    type resource_type NOT NULL,
-    data JSONB,
-    date TIMESTAMP DEFAULT NOW(),
+CREATE TABLE scans (
+    id SERIAL PRIMARY KEY,
+    start TIMESTAMP DEFAULT NOW(),
+    finish TIMESTAMP,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
-CREATE TABLE scans (
-    id SERIAL PRIMARY KEY,
-    resource_id INT REFERENCES resources(um) ON DELETE CASCADE,
-    start TIMESTAMP DEFAULT NOW(),
-    finish TIMESTAMP,
+
+CREATE TABLE resources (
+    urn SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type resource_type NOT NULL,
+    scan_id INT REFERENCES scans(id) ON DELETE CASCADE,
+    data JSONB,
+    date TIMESTAMP DEFAULT NOW(),
+    UNIQUE (scan_id),
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW(),
-    UNIQUE (resource_id)
+    updated_at TIMESTAMP DEFAULT NOW()
 );
+
 
 
 INSERT INTO resources (name, type)
