@@ -10,13 +10,14 @@ CREATE TABLE scans (
 
 
 CREATE TABLE resources (
-    urn SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
+    urn INT,
     name VARCHAR(255) NOT NULL,
     type resource_type NOT NULL,
     scan_id INT REFERENCES scans(id) ON DELETE CASCADE,
     data JSONB,
     date TIMESTAMP DEFAULT NOW(),
-    UNIQUE (scan_id),
+    UNIQUE (urn, scan_id),
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
