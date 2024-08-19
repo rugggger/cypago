@@ -34,7 +34,20 @@ func (a *App) sendJson(w http.ResponseWriter, o interface{}) {
 
 func (a *App) scans(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	res, err := a.sr.GetScans()
+
+	var res interface{}
+	var err error
+	switch req.Method {
+	case http.MethodGet:
+		res, err = a.sr.GetScans()
+	case http.MethodPost:
+		res, err = a.sr.CreateScan()
+
+	default:
+		// Method not allowed
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+
 	if err != nil {
 		logrus.Errorf("error %v", err)
 	}

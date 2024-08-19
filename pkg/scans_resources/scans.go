@@ -26,14 +26,11 @@ func New(sql *sql.DB) *ScansResources {
 }
 
 func (sr *ScansResources) GetScans() ([]*Scan, error) {
-
 	var scans []*Scan
-
 	query := `
 SELECT  s.id, s.start
 FROM scans s
 `
-
 	rows, err := sr.sql.Query(query)
 	if err != nil {
 		return nil, err
@@ -47,6 +44,27 @@ FROM scans s
 		}
 		scans = append(scans, &scan)
 	}
-
 	return scans, nil
+}
+
+func (sr *ScansResources) CreateScan() (*Scan, error) {
+	var scan *Scan
+	query := `
+INSERT INTO scans
+DEFAULT VALUES
+RETURNING id;
+`
+	rows, err := sr.sql.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var scan Scan
+		if err := rows.Scan(&scan.ID); err != nil {
+			return nil, err
+		}
+	}
+	return scan, nil
 }
