@@ -70,7 +70,20 @@ RETURNING id;
 	return scan, nil
 }
 
-func (sr *ScansResources) CreateResource(r Resource) (string, error) {
+func (sr *ScansResources) CreateResource(name string, rType string, scanId int) (string, error) {
+
+	query := `
+	INSERT INTO resources (name, type, scan_id)
+	VALUES ( $1, $2, $3)
+    RETURNING urn;
+`
+
+	_, err := sr.sql.Query(query, name, rType, scanId)
+
+	if err != nil {
+		return "d", err
+	}
+
 	return "sdf", nil
 
 }
