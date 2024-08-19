@@ -16,7 +16,7 @@ type App struct {
 func New() *App {
 	logger.InitLogger()
 	conn := db.GetDBConnection()
-	sr := scans_resources.New()
+	sr := scans_resources.New(conn)
 
 	return &App{
 		sqlConnection: conn,

@@ -34,5 +34,9 @@ func (a *App) sendJson(w http.ResponseWriter, o interface{}) {
 
 func (a *App) scans(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	a.sendJson(w, a.sr.GetScans())
+	res, err := a.sr.GetScans()
+	if err != nil {
+		logrus.Errorf("error %v", err)
+	}
+	a.sendJson(w, res)
 }

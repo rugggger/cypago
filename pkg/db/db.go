@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
 	_ "github.com/lib/pq" // Import the pq package
 	"github.com/sirupsen/logrus"
 	"log"
@@ -9,10 +10,11 @@ import (
 
 func GetDBConnection() *sql.DB {
 	logrus.Info("connecting")
-	connStr := "user=username dbname=mydb sslmode=disable"
+	connString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+		"localhost", 5432, "example", "example", "postgres", "disable")
 
 	// Open a connection to the database
-	db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", connString)
 	if err != nil {
 		log.Fatal(err)
 	}
