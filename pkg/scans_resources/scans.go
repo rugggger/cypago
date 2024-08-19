@@ -20,17 +20,14 @@ func (sr *ScansResources) GetScans() ([]*Scan, error) {
 
 	var scans []*Scan
 
-	// Define the query to get scans
-	query := "SELECT id, name FROM scans"
+	query := "SELECT id from scans"
 
-	// Execute the query
 	rows, err := sr.sql.Query(query)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	// Iterate over the result set
 	for rows.Next() {
 		var scan Scan
 		if err := rows.Scan(&scan.ID); err != nil {

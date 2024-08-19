@@ -18,6 +18,5 @@ func GetDBConnection() *sql.DB {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 	return db
 }
