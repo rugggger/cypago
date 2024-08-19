@@ -10,8 +10,8 @@ CREATE TABLE scans (
 
 
 CREATE TABLE resources (
-    id SERIAL PRIMARY KEY,
     urn INT,
+    PRIMARY KEY (urn, scan_id),
     name VARCHAR(255) NOT NULL,
     type resource_type NOT NULL,
     scan_id INT REFERENCES scans(id) ON DELETE CASCADE,
